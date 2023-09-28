@@ -17,7 +17,7 @@ function menu(menu)
     -- Menu for choosing what to install
     if menu == 1 then
         header()
-        while choice != "Y" and choice != "N" do
+        while choice != "Y" and choice != "N" then
             clearLine(3)
             clearLine(4)
             writeScreen(1,3,"Would you like to install all programs? (Y/N)")
