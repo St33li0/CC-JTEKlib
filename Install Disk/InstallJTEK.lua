@@ -17,7 +17,7 @@ function menu(menu)
     -- Menu for choosing what to install
     if menu == 1 then
         header()
-        while choice != "Y" and choice != "N" then
+        while choice ~= "Y" and choice ~= "N" do
             clearLine(3)
             clearLine(4)
             writeScreen(1,3,"Would you like to install all programs? (Y/N)")
@@ -62,20 +62,20 @@ function error(type)
         print("Encountered Unexpected Error")
     end
     print("Program will restart")
-    term.sleep(4)
+    os.sleep(4)
     runtime()
 end
 
 function header()
     -- JTEK Industries Header
-    temr.clear()
+    term.clear()
     print("JTEK Industries 2023")
     print()
 end
 
 function runtime()
     -- Runtime environment
-    term.sleep(1)
+    os.sleep(1)
     menu(1)
 end
 
@@ -94,5 +94,6 @@ end
 function clearLine(posY)
     term.setCursorPos(1,posY)
     term.clearLine()
+end
 
 runtime()
