@@ -1,5 +1,10 @@
 term.clear()
 
+programs = {
+    GeneratorControl
+
+}
+
 function install(all)
     header()
     if all == true then
@@ -18,8 +23,8 @@ function menu(menu)
     if menu == 1 then
         header()
         while choice ~= "Y" and choice ~= "N" do
-            clearLine(3)
-            clearLine(4)
+            clear(false,3)
+            clear(false,4)
             writeScreen(1,3,"Would you like to install all programs? (Y/N)")
             term.setCursorPos(1,4)
             choice = read()
@@ -42,7 +47,7 @@ function menu(menu)
         choice = read()
         for number in string.gmatch(choice, '([^,]+)') do
             print(number)
-end
+        end
     end
 
 end
@@ -68,7 +73,7 @@ end
 
 function header()
     -- JTEK Industries Header
-    term.clear()
+    clear(true,1,1)
     print("JTEK Industries 2023")
     print()
 end
@@ -91,9 +96,14 @@ function writeScreen(posX,posY,text)
     write(text)
 end
 
-function clearLine(posY)
-    term.setCursorPos(1,posY)
-    term.clearLine()
+function clear(all,posY)
+    if all == true then
+        term.clear()
+        term.setCursorPos(posX,posY)
+    elseif all == false then
+        term.setCursorPos(1,posY)
+        term.clearLine()
+    end
 end
 
 runtime()
