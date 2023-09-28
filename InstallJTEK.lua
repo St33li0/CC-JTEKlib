@@ -1,14 +1,32 @@
 term.clear()
 
 programs = {
-    GeneratorControl
+    "programs/GeneratorControl.lua"
 
 }
+
+function copyAllFiles(path)
+    for i=1, #programs do
+        fs.copy(programs[i],path)
+    end
+end
+
+function copySomeFile(files,path)
+    for number in string.gmatch(files, '([^,]+)') do
+        fs.copy(programs[number],path)
+    end
+end
 
 function install(all)
     header()
     if all == true then
         -- Run Install All to JTEK/
+        if fs.exists("JTEK") then
+            copyAllFiles("JTEK")
+        else
+            fs.makeDir("JTEK")
+            copyAllFiles("JTEK")
+        end
     elseif all == false then
         -- Run Menu for Install Choice
         menu(2)
@@ -45,8 +63,11 @@ function menu(menu)
             term.setCursorPos(1,i+8)
         end
         choice = read()
-        for number in string.gmatch(choice, '([^,]+)') do
-            print(number)
+        if fs.exists("JTEK") then
+            copySomeFiles(choice,"JTEK")
+        else
+            fs.makeDir("JTEK")
+            copySomeFiles(choice,"JTEK")
         end
     end
 
