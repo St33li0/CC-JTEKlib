@@ -1,46 +1,17 @@
-term.clear()
+require "Libraries.JTEKlib"
+clear(true,1)
 
-programs = {
-    "GeneratorControl.lua";
-}
-
-
-
-installPath = "JTEK/"
-sourcePath = "disk/Programs/"
-
-function header()
-    -- JTEK Industries Header
-    clear(true,1,1)
-    print("JTEK Industries 2023")
-    print()
-end
-
-function runtime()
-    -- Runtime environment
-    os.sleep(1)
-    menu(1)
-end
-
-function writeScreen(posX,posY,text)
-    term.setCursorPos(posX,posY)
-    write(text)
-end
-
-function clear(all,posY)
-    if all == true then
-        term.clear()
-        term.setCursorPos(1,posY)
-    elseif all == false then
-        term.setCursorPos(1,posY)
-        term.clearLine()
-    end
-end
+-- {{ [[ Several functions moved to Libraries/JTEKlib.lua, see top. ]] }} --
 
 function copyAllFiles(path)
-    for i=1, #programs do
-        origin = sourcePath..programs[i]
-        destination = installPath..programs[i]
+    for i=1, #programs do -- Copy all available programs to program DIR (Default: JTEK/Programs)
+        origin = sourcePath[1]..programs[i]
+        destination = programInstallPath..programs[i]
+        fs.copy(origin,destination)
+    end
+    for i=1, #libraries do -- Copy all available libraries to lib DIR (Default: JTEK/Lib)
+        origin = sourcePath[2]..libraries[i]
+        destination = libraryInstallPath..libraries[i]
         fs.copy(origin,destination)
     end
 end
@@ -49,10 +20,21 @@ function copySomeFiles(files,path)
     matched = string.gmatch(files, '([^,]+)')
     for number in matched do
         number = tonumber(number)
-        origin = sourcePath..programs[i]
-        destination = installPath..programs[i]
+        origin = sourcePath[1]..programs[i]
+        destination = programInstallPath..programs[i]
         fs.copy(origin,destination)
     end
+    for i=1, #libraries do -- Copy all available libraries to lib DIR (Default: JTEK/Lib)
+        origin = sourcePath[2]..libraries[i]
+        destination = libraryInstallPath..libraries[i]
+        fs.copy(origin,destination)
+    end
+end
+
+function runtime()
+    -- Runtime environment
+    os.sleep(1)
+    menu(1)
 end
 
 function install(all)
@@ -60,6 +42,8 @@ function install(all)
     if all == true then
         -- Run Install All to JTEK/
         if fs.exists("JTEK") then
+            fs.delete("JTEK")
+            fs.makeDir("JTEK")
             copyAllFiles("JTEK/")
         else
             fs.makeDir("JTEK")
@@ -88,9 +72,9 @@ function menu(menu)
         if choice == "Y" then
             install(true)
         else
-            install(false)
+            install(true) -- Forced full install every time.
         end
-    elseif menu == 2 then -- If 1 == False, Ask which programs to install
+    elseif menu == 2 then menu(1) -- If 1 == False, Ask which programs to install
         header()
         print("Please choose the programs you would like to install")
         print("Enter the numbers for all programs you wish to add to the install")
@@ -103,16 +87,16 @@ function menu(menu)
         end
         print()
         choice = read()
-        if fs.exists(installPath) then
-            copySomeFiles(choice,installPath)
+        if fs.exists(programInstallPath) then
+            copySomeFiles(choice,programInstallPath)
         else
-            fs.makeDir(installPath)
-            copySomeFiles(choice,installPath)
+            fs.makeDir(programInstallPath)
+            copySomeFiles(choice,programInstallPath)
         end
     end
 end
 
-function error(type)
+function error(type,message)
     -- Run an error and restart the script
     header()
     if type == OutOfRange then

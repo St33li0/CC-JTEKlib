@@ -1,16 +1,11 @@
-monitor = peripheral.wrap("monitor_0")
+--[[ 
 
-allDisplays = {
-    peripheral.wrap("monitor_0");
-    peripheral.wrap("monitor_1");
-}
+REQUIRES RED POWER / PROJECT:RED TO FUNCTION
+              Documentation:
+ https://github.com/St33li0/CC-JTEKlib/wiki
 
-function writeDisplay(posX,posY,text)
-    for i=1, #allDisplays do
-        allDisplays[i].setCursorPos(posX,posY)
-        allDisplays[i].write(text)
-    end
-end
+]]--
+require ".JTEK.Libraries.JTEKlib"
 
 writeDisplay(1,1,"Systems Online")
 writeDisplay(1,2,"Hopper Lock: ")
